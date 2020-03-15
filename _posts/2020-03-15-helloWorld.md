@@ -7,7 +7,8 @@ author:     Derek 						# 作者
 header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
 catalog: true 						# 是否归档
 tags:								#标签
-    - 测试
+    - 标签1
+    - 标签2
 ---
 
 # Hey
