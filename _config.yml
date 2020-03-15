@@ -11,8 +11,7 @@ github_repo: "https://github.com/DerekYRC" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "Once you replace negative thoughts with positive ones,
-you'll start having positive results."
+# sidebar-about-description: "Once you replace negative thoughts with positive ones, you'll start having positive results."
 sidebar-avatar: /img/avatar-by.JPG      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
