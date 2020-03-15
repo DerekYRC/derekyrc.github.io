@@ -66,8 +66,8 @@ gitalk:
   clientID: cf23e99c97ea2e04ca18                            #生成的clientID
   clientSecret: 7780f3f4e6876fadfcdec58f568069ec2e27774d    #生成的clientSecret
   repo: derekyrc.github.io    #仓库名称
-  owner: Derek    #github用户名
-  admin: Derek
+  owner: DerekYRC    #github用户名
+  admin: DerekYRC
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
