@@ -61,14 +61,14 @@ kramdown:
 # disqus_username: DerekYRC
 
 # Gitalk
-# gitalk:
-#   enable: true    #是否开启Gitalk评论
-#   clientID: f2c84e7629bb1446c1a4                            #生成的clientID
-#   clientSecret: ca6d6139d1e1b8c43f8b2e19492ddcac8b322d0d    #生成的clientSecret
-#   repo: qiubaiying.github.io    #仓库名称
-#   owner: qiubaiying    #github用户名
-#   admin: qiubaiying
-#   distractionFreeMode: true #是否启用类似FB的阴影遮罩
+gitalk:
+  enable: true    #是否开启Gitalk评论
+  clientID: cf23e99c97ea2e04ca18                            #生成的clientID
+  clientSecret: 7780f3f4e6876fadfcdec58f568069ec2e27774d    #生成的clientSecret
+  repo: derekyrc.github.io    #仓库名称
+  owner: DerekYRC    #github用户名
+  admin: DerekYRC
+  distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
 # # 统计
