@@ -4,9 +4,9 @@ title:      从操作系统层面看锁的实现原理
 subtitle:   自旋锁和互斥锁的实现原理
 date:       2020-04-04
 author:     Derek
-header-img: img/post-bg-map.jpg 	# 这篇文章标题背景图片
-catalog: true 						# 是否归档
-tags:								# 标签
+header-img: img/post-bg-map.jpg 	; 这篇文章标题背景图片
+catalog: true 						; 是否归档
+tags:								; 标签
     - 操作系统
     - 锁
 ---
@@ -14,7 +14,7 @@ tags:								# 标签
 
 锁的实现方案有多种，现在来看硬件支持的方案。
 CPU提供了TSL（Test and Set Lock）指令：
-> TSL RX,LOCK  --RX：寄存器，LOCK：内存地址
+> TSL RX,LOCK  ;RX：寄存器，LOCK：内存地址
 
 它将内存地址LOCK（下称lock变量）存放的值读到寄存器RX中，然后在改内存地址中存一个非零值。该指令执行时，CPU将锁住内存总线，以禁止其他CPU访问内存，直至该指令执行结束，因此以上读写操作是原子性的。
 
@@ -23,28 +23,28 @@ CPU提供了TSL（Test and Set Lock）指令：
 竞争锁的过程简化如下：
 ```
 enter_region:
-	TSL REGISTER,LOCK 	#复制锁到寄存器并将锁设为1
-	CMP REGISTER,#0 	#判断锁是否为零
-	JNE enter_region	#锁不为零则自旋循环，直至成功
-	RET 				#锁为零则说明竞争锁成功，返回进入临界区
+	TSL REGISTER,LOCK 	;复制锁到寄存器并将锁设为1
+	CMP REGISTER,#0 	;判断锁是否为零
+	JNE enter_region	;锁不为零则自旋循环，直至成功
+	RET 				;锁为零则说明竞争锁成功，返回进入临界区
 ```
 
 释放锁很简单，只需将lock变量值设为零即可，指令简化如下：
 ```
 leave_region:
-	MOVE LOCK,#0	#锁值设为零
-	RET 			#返回
+	MOVE LOCK,#0	;锁值设为零
+	RET 			;返回
 ```
 
 除了TSL指令可以实现锁外还有XCHG指令。XCHG指令可以原子性地交换两个位置（如寄存器和内存地址上的值）的值。思路同上：
 竞争锁的过程：
 ```
 enter_region:
-	MOVE REGISTER,#1	#设寄存器值为1
-	XCHG REGISTER,LOCK 	#交换寄存器和锁变量的值
-	CMP REGISTER,#0 	#判断锁是否为零
-	JNE enter_region	#锁不为零则自旋循环，直至成功
-	RET 				#锁为零则说明竞争锁成功，返回进入临界区
+	MOVE REGISTER,#1	;设寄存器值为1
+	XCHG REGISTER,LOCK 	;交换寄存器和锁变量的值
+	CMP REGISTER,#0 	;判断锁是否为零
+	JNE enter_region	;锁不为零则自旋循环，直至成功
+	RET 				;锁为零则说明竞争锁成功，返回进入临界区
 ```
 
 
