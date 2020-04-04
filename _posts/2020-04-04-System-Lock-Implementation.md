@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      从操作系统层面看锁的实现原理 
-subtitle:   自旋锁和互斥锁的实现原理
+subtitle:   锁的实现原理
 date:       2020-04-04
 author:     Derek
 header-img: img/post-bg-map.jpg 	; 这篇文章标题背景图片
@@ -27,6 +27,7 @@ enter_region:
 	CMP REGISTER,#0 	;判断锁是否为零
 	JNE enter_region	;锁不为零则自旋循环，直至成功
 	RET 				;锁为零则说明竞争锁成功，返回进入临界区
+
 ```
 
 释放锁很简单，只需将lock变量值设为零即可，指令简化如下：
@@ -34,9 +35,10 @@ enter_region:
 leave_region:
 	MOVE LOCK,#0	;锁值设为零
 	RET 			;返回
+
 ```
 
-除了TSL指令可以实现锁外还有XCHG指令。XCHG指令可以原子性地交换两个位置（如寄存器和内存地址上的值）的值。思路同上：
+除了TSL指令可以实现锁外还有XCHG指令。XCHG指令可以原子性地交换两个位置（如寄存器和内存地址上的值）的值。用XCHG实现锁的思路同上：
 竞争锁的过程：
 ```
 enter_region:
@@ -45,7 +47,23 @@ enter_region:
 	CMP REGISTER,#0 	;判断锁是否为零
 	JNE enter_region	;锁不为零则自旋循环，直至成功
 	RET 				;锁为零则说明竞争锁成功，返回进入临界区
+
 ```
+
+上述是自旋锁的实现原理，可见其在获取锁失败的时候会自旋不断循环重试，直至成功。在竞争不激烈的时候，重试次数较少时就能成功获取锁，当竞争激烈时，过多的线程自旋会占用CPU的时间，所以在竞争激烈的情况下，可以在获取锁失败时主动让出CPU时间片，待调度程序重新调度本线程运行时重试。思路如下：
+竞争锁的过程简化如下：
+```
+enter_region:
+	TSL REGISTER,LOCK 	;复制锁到寄存器并将锁设为1
+	CMP REGISTER,#0 	;判断锁是否为零
+	JZE ok				;竞争锁成功，返回
+	call thread_yield	;竞争锁失败，主动让出CPU时间片
+	JMP enter_region	;下次被调度时重试
+ok: RET
+
+```
+
+
 
 
 
